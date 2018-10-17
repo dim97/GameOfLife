@@ -1,0 +1,12 @@
+c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\obj\Debug\GameOfLifeConsole.csprojAssemblyReference.cache
+c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\obj\Debug\GameOfLifeConsole.csproj.CoreCompileInputs.cache
+c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\bin\Debug\GameOfLifeConsole.exe.config
+c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\bin\Debug\GameOfLifeConsole.exe
+c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\bin\Debug\GameOfLifeConsole.pdb
+c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\obj\Debug\GameOfLifeConsole.exe
+c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\obj\Debug\GameOfLifeConsole.pdb
+c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\bin\Debug\Json.dll
+c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\bin\Debug\Newtonsoft.Json.dll
+c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\bin\Debug\Json.pdb
+c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\bin\Debug\Newtonsoft.Json.xml
+c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\obj\Debug\GameOfLifeConsole.csproj.CopyComplete
