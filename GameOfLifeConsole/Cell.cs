@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace GameOfLifeConsole
 {
@@ -16,8 +17,8 @@ namespace GameOfLifeConsole
         public Cell(int x, int y)
         {
             Location = new Point(x, y);
-            Location.X = x;
-            Location.Y = y;
+            //Location.X = (bool)x;
+            //Location.Y = y;
         }
 
         public List<Point> GetNeighbors(int width, int heigth)
@@ -40,18 +41,19 @@ namespace GameOfLifeConsole
         }
     }
 
-    public class Point
-    {
-        int _x;
-        int _y;
+    //public class Point1
+    //{
+    //    int _x;
+    //    int _y;
 
-        public int X { get => _x; set => _x = value; }
-        public int Y { get => _y; set => _y = value; }
+    //    public int X { get => _x; set => _x = value; }
+    //    public int Y { get => _y; set => _y = value; }
 
-        public Point(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
-    }
+    //    public Point(int x, int y)
+    //    {
+    //        Point startPoint = new Point(,);
+    //        X = x;
+    //        Y = y;
+    //    }
+    //}
 }

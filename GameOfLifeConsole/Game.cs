@@ -2,49 +2,60 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
+using System.Drawing;
 
 namespace GameOfLifeConsole
 {
     public class Game
     {
-        public static int enteredWidth;
-        public static int enteredHeigth;
-        public static List<Cell> cells;
-        public static Field field;
-        public static int generation;
-        public static bool pause;
+        public bool IsDrawing { get; set; }
+        public int GameNumber { get; set; }
+        static int _enteredWidth; 
+        static int _enteredHeigth;
+        public List<Cell> Cells { get; set; }
+        public Field Field { get; set; }
+        public int Generation { get; set; }
+        public static bool Pause { get; set; }
+        int countOfLivingCells = 0;
 
-        public static void Play()
+
+        public Game(int numberOfTheGame)
         {
-            pause = false;
+            GameNumber = numberOfTheGame;
+        }
 
+        public void Play()
+        {
+            Pause = false;
+
+            SetRandomLivingCells();
             Thread game = new Thread(Life);
-            Thread buttonHandler = new Thread(ButtonHandler);
-
-            SetGameOptions();
-            DrawField();
-            DevOptions();
+            Thread buttonHandler = new Thread(ButtonHandler);           
 
             game.Start();
             buttonHandler.Start();
 
         }
 
-        public static void Life()
+        public void Life()
         {
-            generation = 0;
+            Generation = 0;
             while (true)
-                if (pause == false)
+                if (Pause == false)
                 {
                     //Drawing current generation
-                    Console.Clear();
-                    DrawField();
-                    generation++;
+                    if (IsDrawing)
+                    {
+                        Console.Clear();
+                        CountLivingCells();
+                        DrawField();
+                    }
+
+                    Generation++;
 
                     //Processing next generation
-                    foreach (Cell cell in cells)
+                    foreach (Cell cell in Cells)
                     {
                         int neighborsCount = CountLivingNeighbors(cell);
 
@@ -58,38 +69,42 @@ namespace GameOfLifeConsole
                 }
         }
 
-        public static int CountLivingNeighbors(Cell cell)
+        public int CountLivingNeighbors(Cell cell)
         {
             int count = 0;
-            List<Point> neighborsPositions = cell.GetNeighbors(enteredWidth, enteredHeigth);
+            List<Point> neighborsPositions = cell.GetNeighbors(_enteredWidth, _enteredHeigth);
             foreach (Point neighbor in neighborsPositions)
             {
-                if (field.CellsToDraw[neighbor.Y, neighbor.X] == true)
+                if (Field.CellsToDraw[neighbor.Y, neighbor.X] == true)
                     count++;
             }
 
             return count;
         }
 
-        public static void SetGameOptions()
+        public static void RequestGameOptions()
         {
             Console.Write("\nPlease enter width of field -> ");
             string inputWidth = Console.ReadLine();
-            Int32.TryParse(inputWidth, out enteredWidth);
+            Int32.TryParse(inputWidth, out _enteredWidth);
 
             Console.Write("\nPlease enter heigth of field -> ");
             string inputHeigth = Console.ReadLine();
-            Int32.TryParse(inputHeigth, out enteredHeigth);
+            Int32.TryParse(inputHeigth, out _enteredHeigth);
             Console.Clear();
+        }
 
-            field = new Field(enteredWidth, enteredHeigth);
+        public void SetGameOptions()
+        {
+            Field = new Field(_enteredWidth, _enteredHeigth);
 
-            cells = new List<Cell>();
-            for (int i = 0; i < enteredHeigth; i++)
+            Cells = new List<Cell>();
+
+            for (int i = 0; i < _enteredHeigth; i++)
             {
-                for (int j = 0; j < enteredWidth; j++)
+                for (int j = 0; j < _enteredWidth; j++)
                 {
-                    cells.Add(new Cell(j, i));
+                    Cells.Add(new Cell(j, i));
                 }
             }
 
@@ -97,29 +112,33 @@ namespace GameOfLifeConsole
             //o.ToString();
         }
 
-        public static void DrawField()
+        public void CountLivingCells()
         {
-            int countOfLivingCells = 0;
+            countOfLivingCells = 0;
 
-            foreach (Cell cell in cells)
+            foreach (Cell cell in Cells)
             {
                 if (cell.IsAlive)
                 {
-                    field.CellsToDraw[cell.Location.Y, cell.Location.X] = true;
+                    Field.CellsToDraw[cell.Location.Y, cell.Location.X] = true;
                     countOfLivingCells++;
                 }
-                else field.CellsToDraw[cell.Location.Y, cell.Location.X] = false;
+                else Field.CellsToDraw[cell.Location.Y, cell.Location.X] = false;
             }
+        }
 
+        public void DrawField()
+        {
             //Drawing
-            Console.WriteLine("Current generation: " + generation);
-            Console.WriteLine("Count of living cells: " + countOfLivingCells + "\n");
+            Console.WriteLine("Game number: " + GameNumber + "\n");
+            Console.WriteLine("Current generation: " + Generation);
+            Console.WriteLine("Count of living cells: " + countOfLivingCells + "\n");           
 
-            for (int i = 0; i < field.Heigth; i++)
+            for (int i = 0; i < Field.Heigth; i++)
             {
-                for (int j = 0; j < field.Width; j++)
+                for (int j = 0; j < Field.Width; j++)
                 {
-                    if (field.CellsToDraw[i, j])
+                    if (Field.CellsToDraw[i, j])
                         Console.Write('#');
                     else
                         Console.Write('.');
@@ -130,79 +149,66 @@ namespace GameOfLifeConsole
             //Console.Read();
         }
 
-        public static void DevOptions()
+        public void SetRandomLivingCells()
         {
-            //temporary options to tests
-
-            //Field 40 X 40 - Glider
-            //cells[41].IsAlive = true;
-
-            //cells[82].IsAlive = true;
-
-            //cells[120].IsAlive = true;
-            //cells[121].IsAlive = true;
-            //cells[122].IsAlive = true;
-            //
-
-            // Random
             Random random = new Random();
-            foreach (Cell cell in cells)
+            foreach (Cell cell in Cells)
             {
                 if (random.Next(2) == 0)
                     cell.IsAlive = false;
                 else cell.IsAlive = true;
             }
-            //
         }
 
-        public static void ButtonHandler()
+        public void ButtonHandler()
         {
-            ConsoleKeyInfo keyinfo;
-            while (true)
+            if (IsDrawing)
             {
-                //Pause Key: "Spacebar"
-                keyinfo = Console.ReadKey();
-                if ((keyinfo.Key == ConsoleKey.Spacebar)&&(pause==false))
-                    pause = true;
-                else if ((keyinfo.Key == ConsoleKey.Spacebar) && (pause == true))
-                    pause = false;
-
-                //Exit Key: "Escape"
-                if (keyinfo.Key == ConsoleKey.Escape)
-                    Environment.Exit(0);
-
-                //Save Key: "S"
-                if (keyinfo.Key == ConsoleKey.S)
+                ConsoleKeyInfo keyinfo;
+                while (true)
                 {
-                    string fileName = "Save.json";
-                    string output = JsonConvert.SerializeObject(cells);
+                    //Pause Key: "Spacebar"
+                    keyinfo = Console.ReadKey();
+                    if ((keyinfo.Key == ConsoleKey.Spacebar))
+                        Pause = !Pause;
 
-                    using (StreamWriter sw = new StreamWriter(fileName))
+                    //Exit Key: "Escape"
+                    if (keyinfo.Key == ConsoleKey.Escape)
+                        Environment.Exit(0);
+
+                    //Save Key: "S"
+                    if (keyinfo.Key == ConsoleKey.S)
                     {
-                        sw.Write(output);
-                    }
-                }
-                //Load Key: "L"
-                if (keyinfo.Key == ConsoleKey.L)
-                {
-                    string fileName = "Save.json";
-                    string input;
+                        string fileName = "Save.json";
+                        string output = JsonConvert.SerializeObject(Cells);
 
-                    using (StreamReader sr = new StreamReader(fileName))
+                        using (StreamWriter sw = new StreamWriter(fileName))
+                        {
+                            sw.Write(output);
+                        }
+                    }
+                    //Load Key: "L"
+                    if (keyinfo.Key == ConsoleKey.L)
                     {
-                        input = sr.ReadLine();
+                        string fileName = "Save.json";
+                        string input;
+
+                        using (StreamReader sr = new StreamReader(fileName))
+                        {
+                            input = sr.ReadLine();
+                        }
+
+                        Pause = true;
+                        Cells.Clear();
+                        Cells = JsonConvert.DeserializeObject<List<Cell>>(input);
+                        _enteredWidth = Cells[Cells.Count - 1].Location.X + 1;
+                        _enteredHeigth = Cells[Cells.Count - 1].Location.Y + 1;
+                        Field = new Field(_enteredWidth, _enteredHeigth);
+
+                        Generation = 0;
+
+                        Pause = false;
                     }
-
-                    pause = true;
-                    cells.Clear();
-                    cells = JsonConvert.DeserializeObject<List<Cell>>(input);
-                    enteredWidth = cells[cells.Count - 1].Location.X+1;
-                    enteredHeigth = cells[cells.Count - 1].Location.Y+1;
-                    field = new Field(enteredWidth, enteredHeigth);
-
-                    generation = 0;
-
-                    pause = false;
                 }
             }
         }
