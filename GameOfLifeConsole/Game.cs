@@ -1,17 +1,17 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading;
 using System.Drawing;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace GameOfLifeConsole
 {
     public class Game
     {
-        public bool IsDrawing { get; set; }
         public int GameNumber { get; set; }
-        static int _enteredWidth; 
+        static int _enteredWidth;
         static int _enteredHeigth;
         public List<Cell> Cells { get; set; }
         public Field Field { get; set; }
@@ -31,7 +31,7 @@ namespace GameOfLifeConsole
 
             SetRandomLivingCells();
             Thread game = new Thread(Life);
-            Thread buttonHandler = new Thread(ButtonHandler);           
+            Thread buttonHandler = new Thread(ButtonHandler);
 
             game.Start();
             buttonHandler.Start();
@@ -44,13 +44,8 @@ namespace GameOfLifeConsole
             while (true)
                 if (Pause == false)
                 {
-                    //Drawing current generation
-                    if (IsDrawing)
-                    {
-                        Console.Clear();
-                        CountLivingCells();
-                        DrawField();
-                    }
+
+                    CountLivingCells();
 
                     Generation++;
 
@@ -59,9 +54,12 @@ namespace GameOfLifeConsole
                     {
                         int neighborsCount = CountLivingNeighbors(cell);
 
-                        if ((neighborsCount < 2) || (neighborsCount > 3)) cell.IsAlive = false;
-                        if ((neighborsCount == 3) && (cell.IsAlive == false)) cell.IsAlive = true;
-                        if ((neighborsCount == 2) && (cell.IsAlive == false)) cell.IsAlive = false;
+                        if ((neighborsCount < 2) || (neighborsCount > 3))
+                        { cell.IsAlive = false; }
+                        if ((neighborsCount == 3) && (cell.IsAlive == false))
+                        { cell.IsAlive = true; }
+                        if ((neighborsCount == 2) && (cell.IsAlive == false))
+                        { cell.IsAlive = false; }
 
                     }
 
@@ -83,14 +81,24 @@ namespace GameOfLifeConsole
         }
 
         public static void RequestGameOptions()
-        {
-            Console.Write("\nPlease enter width of field -> ");
-            string inputWidth = Console.ReadLine();
+        {           
+            string inputWidth ="";
+            string inputHeigth = "";
+
+            while (!Regex.IsMatch(inputWidth, @"^\d+$"))
+            {
+                Console.Write("Please enter width of field -> ");
+                inputWidth =  Console.ReadLine();
+            }
             Int32.TryParse(inputWidth, out _enteredWidth);
 
-            Console.Write("\nPlease enter heigth of field -> ");
-            string inputHeigth = Console.ReadLine();
+            while (!Regex.IsMatch(inputWidth, @"^\d+$"))
+            {
+                Console.Write("Please enter heigth of field -> ");
+                inputHeigth = Console.ReadLine();
+            }           
             Int32.TryParse(inputHeigth, out _enteredHeigth);
+
             Console.Clear();
         }
 
@@ -127,90 +135,95 @@ namespace GameOfLifeConsole
             }
         }
 
-        public void DrawField()
+        public string GetFieldString()
         {
-            //Drawing
-            Console.WriteLine("Game number: " + GameNumber + "\n");
-            Console.WriteLine("Current generation: " + Generation);
-            Console.WriteLine("Count of living cells: " + countOfLivingCells + "\n");           
+            //For Drawing 
+            string output = "";
+            output += "Game number: " + GameNumber + "\n"
+            + "Current generation: " + Generation + "\n"
+            + "Count of living cells: " + countOfLivingCells + "\n";
 
             for (int i = 0; i < Field.Heigth; i++)
             {
                 for (int j = 0; j < Field.Width; j++)
                 {
                     if (Field.CellsToDraw[i, j])
-                        Console.Write('#');
+                    {
+                        output += '#';
+                    }
                     else
-                        Console.Write('.');
-                    Console.Write(' ');
+                    {
+                        output += '.';
+                    }
+                    output += ' ';
                 }
-                Console.Write("\n");
+                output += "\n";
             }
-            //Console.Read();
+            return output;
         }
 
         public void SetRandomLivingCells()
         {
-            Random random = new Random();
+            Random random = new Random(GameNumber);
             foreach (Cell cell in Cells)
             {
                 if (random.Next(2) == 0)
                     cell.IsAlive = false;
                 else cell.IsAlive = true;
+                Thread.Sleep(3);
             }
         }
 
         public void ButtonHandler()
         {
-            if (IsDrawing)
+
+            ConsoleKeyInfo keyinfo;
+            while (true)
             {
-                ConsoleKeyInfo keyinfo;
-                while (true)
+                //Pause Key: "Spacebar"
+                keyinfo = Console.ReadKey();
+                if ((keyinfo.Key == ConsoleKey.Spacebar))
+                    Pause = !Pause;
+
+                //Exit Key: "Escape"
+                if (keyinfo.Key == ConsoleKey.Escape)
+                    Environment.Exit(0);
+
+                //Save Key: "S"
+                if (keyinfo.Key == ConsoleKey.S)
                 {
-                    //Pause Key: "Spacebar"
-                    keyinfo = Console.ReadKey();
-                    if ((keyinfo.Key == ConsoleKey.Spacebar))
-                        Pause = !Pause;
+                    string fileName = "Save.json";
+                    string output = JsonConvert.SerializeObject(Cells);
 
-                    //Exit Key: "Escape"
-                    if (keyinfo.Key == ConsoleKey.Escape)
-                        Environment.Exit(0);
-
-                    //Save Key: "S"
-                    if (keyinfo.Key == ConsoleKey.S)
+                    using (StreamWriter sw = new StreamWriter(fileName))
                     {
-                        string fileName = "Save.json";
-                        string output = JsonConvert.SerializeObject(Cells);
-
-                        using (StreamWriter sw = new StreamWriter(fileName))
-                        {
-                            sw.Write(output);
-                        }
-                    }
-                    //Load Key: "L"
-                    if (keyinfo.Key == ConsoleKey.L)
-                    {
-                        string fileName = "Save.json";
-                        string input;
-
-                        using (StreamReader sr = new StreamReader(fileName))
-                        {
-                            input = sr.ReadLine();
-                        }
-
-                        Pause = true;
-                        Cells.Clear();
-                        Cells = JsonConvert.DeserializeObject<List<Cell>>(input);
-                        _enteredWidth = Cells[Cells.Count - 1].Location.X + 1;
-                        _enteredHeigth = Cells[Cells.Count - 1].Location.Y + 1;
-                        Field = new Field(_enteredWidth, _enteredHeigth);
-
-                        Generation = 0;
-
-                        Pause = false;
+                        sw.Write(output);
                     }
                 }
+                //Load Key: "L"
+                if (keyinfo.Key == ConsoleKey.L)
+                {
+                    string fileName = "Save.json";
+                    string input;
+
+                    using (StreamReader sr = new StreamReader(fileName))
+                    {
+                        input = sr.ReadLine();
+                    }
+
+                    Pause = true;
+                    Cells.Clear();
+                    Cells = JsonConvert.DeserializeObject<List<Cell>>(input);
+                    _enteredWidth = Cells[Cells.Count - 1].Location.X + 1;
+                    _enteredHeigth = Cells[Cells.Count - 1].Location.Y + 1;
+                    Field = new Field(_enteredWidth, _enteredHeigth);
+
+                    Generation = 0;
+
+                    Pause = false;
+                }
             }
+
         }
     }
 }

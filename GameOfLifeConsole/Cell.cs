@@ -5,11 +5,9 @@ namespace GameOfLifeConsole
 {
     public class Cell
     {
-        bool _isAlive;
-        Point _location;
 
-        public bool IsAlive { get => _isAlive; set => _isAlive = value; }
-        public Point Location { get => _location; set => _location = value; }
+        public bool IsAlive;
+        public Point Location;
 
         public Cell()
         {
@@ -17,8 +15,6 @@ namespace GameOfLifeConsole
         public Cell(int x, int y)
         {
             Location = new Point(x, y);
-            //Location.X = (bool)x;
-            //Location.Y = y;
         }
 
         public List<Point> GetNeighbors(int width, int heigth)
@@ -36,24 +32,10 @@ namespace GameOfLifeConsole
             List<Point> processedNeighbors = new List<Point>();
             foreach (Point neighbor in neighbors)
                 if (!((neighbor.X < 0) || (neighbor.X >= width) || (neighbor.Y < 0) || (neighbor.Y >= heigth)))
+                {
                     processedNeighbors.Add(neighbor);
+                }
             return processedNeighbors;
         }
     }
-
-    //public class Point1
-    //{
-    //    int _x;
-    //    int _y;
-
-    //    public int X { get => _x; set => _x = value; }
-    //    public int Y { get => _y; set => _y = value; }
-
-    //    public Point(int x, int y)
-    //    {
-    //        Point startPoint = new Point(,);
-    //        X = x;
-    //        Y = y;
-    //    }
-    //}
 }

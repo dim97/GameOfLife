@@ -13,10 +13,22 @@ namespace GameOfLifeConsole
         static void Main(string[] args)
         {
             Thread keyHandling = new Thread(GlobalKeyHandler);
+            Thread drawing = new Thread(Draw);
 
             Start();
             keyHandling.Start();
-            
+            drawing.Start();
+        }
+
+        static void Draw()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine(games[currentDrawingGame].GetFieldString());
+
+                Thread.Sleep(1000);
+            }
         }
 
         static void Start()
@@ -43,11 +55,12 @@ namespace GameOfLifeConsole
 
                 if (i == 0)
                 {
-                    games[i].IsDrawing = true;
+                    //games[i].IsDrawing = true;
                     currentDrawingGame = i;
                 }
             }
         }
+
         static void GlobalKeyHandler()
         {
             ConsoleKeyInfo keyinfo;
@@ -57,11 +70,11 @@ namespace GameOfLifeConsole
                 keyinfo = Console.ReadKey();
                 if (keyinfo.Key == ConsoleKey.RightArrow)
                 {
-                    if (currentDrawingGame < 999)
+                    if (currentDrawingGame < games.Count-1)
                     {
-                        games[currentDrawingGame].IsDrawing = false;
+                        //games[currentDrawingGame].IsDrawing = false;
                         currentDrawingGame++;
-                        games[currentDrawingGame].IsDrawing = true;
+                        //games[currentDrawingGame].IsDrawing = true;
                     }
                 }
                 //Next Previous: "LeftArrow"
@@ -69,9 +82,9 @@ namespace GameOfLifeConsole
                 {
                     if (currentDrawingGame > 0)
                     {
-                        games[currentDrawingGame].IsDrawing = false;
+                        //games[currentDrawingGame].IsDrawing = false;
                         currentDrawingGame--;
-                        games[currentDrawingGame].IsDrawing = true;
+                        //games[currentDrawingGame].IsDrawing = true;
                     }
                 }
             }

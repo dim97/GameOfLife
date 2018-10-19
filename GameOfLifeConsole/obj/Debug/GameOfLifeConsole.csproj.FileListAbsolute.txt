@@ -10,3 +10,16 @@ c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\bin
 c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\bin\Debug\Json.pdb
 c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\bin\Debug\Newtonsoft.Json.xml
 c:\users\dmitrijs.mamontovs\source\repos\GameOfLifeConsole\GameOfLifeConsole\obj\Debug\GameOfLifeConsole.csproj.CopyComplete
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\bin\Debug\GameOfLifeConsole.exe.config
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\bin\Debug\GameOfLifeConsole.exe
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\bin\Debug\GameOfLifeConsole.pdb
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\bin\Debug\Json.dll
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\bin\Debug\Newtonsoft.Json.dll
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\bin\Debug\System.Drawing.Primitives.dll
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\bin\Debug\Json.pdb
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\bin\Debug\Newtonsoft.Json.xml
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\obj\Debug\GameOfLifeConsole.csprojAssemblyReference.cache
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\obj\Debug\GameOfLifeConsole.csproj.CoreCompileInputs.cache
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\obj\Debug\GameOfLifeConsole.csproj.CopyComplete
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\obj\Debug\GameOfLifeConsole.exe
+C:\Users\dmitrijs.mamontovs\Desktop\Git\GameOfLife\GameOfLifeConsole\obj\Debug\GameOfLifeConsole.pdb
