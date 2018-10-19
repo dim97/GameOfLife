@@ -26,15 +26,12 @@ namespace GameOfLifeConsole
             {
                 Console.Clear();
                 Console.WriteLine(games[currentDrawingGame].GetFieldString());
-
                 Thread.Sleep(1000);
             }
         }
 
         static void Start()
-        {
-            //Game game = new Game();
-            //game.Play();           
+        {      
 
             Game.RequestGameOptions();
 
@@ -49,13 +46,8 @@ namespace GameOfLifeConsole
                 threads.Add(new Thread(games[i].Play));
                 threads[i].Start();
 
-                //if(i-1>=0) games[i-1].IsDrawing = false;
-                //games[i].IsDrawing = true;
-                //Thread.Sleep(100);
-
                 if (i == 0)
                 {
-                    //games[i].IsDrawing = true;
                     currentDrawingGame = i;
                 }
             }
@@ -72,9 +64,7 @@ namespace GameOfLifeConsole
                 {
                     if (currentDrawingGame < games.Count-1)
                     {
-                        //games[currentDrawingGame].IsDrawing = false;
                         currentDrawingGame++;
-                        //games[currentDrawingGame].IsDrawing = true;
                     }
                 }
                 //Next Previous: "LeftArrow"
@@ -82,9 +72,7 @@ namespace GameOfLifeConsole
                 {
                     if (currentDrawingGame > 0)
                     {
-                        //games[currentDrawingGame].IsDrawing = false;
                         currentDrawingGame--;
-                        //games[currentDrawingGame].IsDrawing = true;
                     }
                 }
             }
