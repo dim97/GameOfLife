@@ -24,14 +24,17 @@ namespace GameOfLifeConsole
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine(games[currentDrawingGame].GetFieldString());
-                Thread.Sleep(1000);
+                if (!Game.Pause)
+                {
+                    Console.Clear();
+                    Console.WriteLine(games[currentDrawingGame].GetFieldString());
+                    Thread.Sleep(1000);
+                }
             }
         }
 
         static void Start()
-        {      
+        {
 
             Game.RequestGameOptions();
 
@@ -62,7 +65,7 @@ namespace GameOfLifeConsole
                 keyinfo = Console.ReadKey();
                 if (keyinfo.Key == ConsoleKey.RightArrow)
                 {
-                    if (currentDrawingGame < games.Count-1)
+                    if (currentDrawingGame < games.Count - 1)
                     {
                         currentDrawingGame++;
                     }

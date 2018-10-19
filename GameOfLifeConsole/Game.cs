@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace GameOfLifeConsole
@@ -60,15 +59,14 @@ namespace GameOfLifeConsole
                         {
                             cell.IsAlive = false;
                         }
-                        if ((neighborsCount == 3) && (cell.IsAlive == false))
+                        if ((neighborsCount == 3) && !cell.IsAlive)
                         {
                             cell.IsAlive = true;
                         }
-                        if ((neighborsCount == 2) && (cell.IsAlive == false))
+                        if ((neighborsCount == 2) && !cell.IsAlive)
                         {
                             cell.IsAlive = false;
                         }
-
                     }
 
                     Thread.Sleep(1000);
@@ -81,7 +79,7 @@ namespace GameOfLifeConsole
             List<Point> neighborsPositions = cell.GetNeighbors(enteredWidth, enteredHeigth);
             foreach (Point neighbor in neighborsPositions)
             {
-                if (Field.CellsToDraw[neighbor.Y, neighbor.X] == true)
+                if (Field.CellsToDraw[neighbor.Y, neighbor.X])
                 {
                     count++;
                 }
@@ -94,28 +92,24 @@ namespace GameOfLifeConsole
         {
             string inputWidth = "";
             string inputHeigth = "";
-
-            while (!Regex.IsMatch(inputWidth, @"^\d+$"))
+            
+            Console.Write("Please enter width of field (in range: 1-200)  -> ");
+            inputWidth = Console.ReadLine();
+            while (!(Int32.TryParse(inputWidth, out enteredWidth) && (enteredWidth >= 1) && (enteredWidth <= 200)))
             {
-                Console.Write("Please enter width of field  -> ");
+                Console.Write("\nEntered width is incorrect. Please enter a positive integer number (in range: 1-200) -> ");
                 inputWidth = Console.ReadLine();
             }
-            Int32.TryParse(inputWidth, out enteredWidth);
 
-            while (!Regex.IsMatch(inputHeigth, @"^\d+$"))
+            Console.Write("Please enter heigth of field (in range: 1-200)  -> ");
+            inputHeigth = Console.ReadLine();
+
+            while (!(Int32.TryParse(inputHeigth, out enteredHeigth)&&(enteredHeigth>=1) && (enteredHeigth <=200)))
             {
-                Console.Write("Please enter heigth of field  -> ");
+                Console.Write("\nEntered heigth is incorrect. Please enter a positive integer number (in range: 1-200) -> ");
                 inputHeigth = Console.ReadLine();
             }
-            Int32.TryParse(inputHeigth, out enteredHeigth);
-            if ((enteredWidth < 3) || (enteredWidth >= 1000))
-            {
-                enteredWidth = 3;
-            }
-            if ((enteredHeigth < 3) || (enteredHeigth >= 1000))
-            {
-                enteredHeigth = 3;
-            }
+
             Console.Clear();
         }
 
