@@ -43,25 +43,26 @@ namespace GameOfLifeConsole
                 {
 
                     CountLivingCells();
-
                     Generation++;
 
                     //Processing next generation
-                    foreach (Cell cell in Cells)
+                    List<Cell> oldCells = new List<Cell>(Cells);
+                    
+                    for (int i = 0; i < Cells.Count; i++)
                     {
-                        int neighborsCount = CountLivingNeighbors(cell);
+                        int neighborsCount = CountLivingNeighbors(oldCells[i]);
 
                         if ((neighborsCount < 2) || (neighborsCount > 3))
                         {
-                            cell.IsAlive = false;
+                            Cells[i].IsAlive = false;
                         }
-                        if ((neighborsCount == 3) && !cell.IsAlive)
+                        if ((neighborsCount == 3) && !oldCells[i].IsAlive)
                         {
-                            cell.IsAlive = true;
+                            Cells[i].IsAlive = true;
                         }
-                        if ((neighborsCount == 2) && !cell.IsAlive)
+                        if ((neighborsCount == 2) && !oldCells[i].IsAlive)
                         {
-                            cell.IsAlive = false;
+                            Cells[i].IsAlive = false;
                         }
                     }
 
