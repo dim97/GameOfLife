@@ -8,7 +8,6 @@ namespace GameOfLifeConsole
 {
     public static class GlobalKeyHandler
     {
-
         public static void HandleKeys()
         {
             ConsoleKeyInfo keyinfo;
@@ -19,6 +18,11 @@ namespace GameOfLifeConsole
                 if (keyinfo.Key == ConsoleKey.Spacebar)
                 {
                     Game.Pause = !Game.Pause;
+                }
+                //Exit Key: "Escape"
+                if (keyinfo.Key == ConsoleKey.Escape)
+                {
+                    Environment.Exit(0);
                 }
                 //Next Key: "RightArrow"
                 keyinfo = Console.ReadKey();
@@ -36,6 +40,11 @@ namespace GameOfLifeConsole
                     {
                         GamesHandler.currentDrawingGame--;
                     }
+                }
+                //Save all games "S"
+                if (keyinfo.Key == ConsoleKey.S)
+                {
+                    GamesHandler.SaveAllGamesToFile("Save.json");
                 }
             }
         }

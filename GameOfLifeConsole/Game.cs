@@ -12,7 +12,7 @@ namespace GameOfLifeConsole
         public static bool Pause;
         public static int Width;
         public static int Heigth;
-        public static string FileName = "Save.json";
+       // public static string FileName = "Save.json";
 
         public int GameNumber;
         public List<Cell> Cells;
@@ -166,36 +166,36 @@ namespace GameOfLifeConsole
                 }
 
                 //Save Key: "S"
-                if (keyinfo.Key == ConsoleKey.S)
-                {
-                    string output = JsonConvert.SerializeObject(Cells);
+                //if (keyinfo.Key == ConsoleKey.S)
+                //{
+                //    string output = JsonConvert.SerializeObject(Cells);
 
-                    using (StreamWriter sw = new StreamWriter(FileName))
-                    {
-                        sw.Write(output);
-                    }
-                }
+                //    using (StreamWriter sw = new StreamWriter(FileName))
+                //    {
+                //        sw.Write(output);
+                //    }
+                //}
                 //Load Key: "L"
-                if (keyinfo.Key == ConsoleKey.L)
-                {
-                    string input;
+                //if (keyinfo.Key == ConsoleKey.L)
+                //{
+                //    string input;
 
-                    using (StreamReader sr = new StreamReader(FileName))
-                    {
-                        input = sr.ReadLine();
-                    }
+                //    using (StreamReader sr = new StreamReader(FileName))
+                //    {
+                //        input = sr.ReadLine();
+                //    }
 
-                    Pause = true;
-                    Cells.Clear();
-                    Cells = JsonConvert.DeserializeObject<List<Cell>>(input);
-                    Width = Cells[Cells.Count - 1].Location.X + 1;
-                    Heigth = Cells[Cells.Count - 1].Location.Y + 1;
-                    Field = new Field(Width, Heigth);
+                //    Pause = true;
+                //    Cells.Clear();
+                //    Cells = JsonConvert.DeserializeObject<List<Cell>>(input);
+                //    Width = Cells[Cells.Count - 1].Location.X + 1;
+                //    Heigth = Cells[Cells.Count - 1].Location.Y + 1;
+                //    Field = new Field(Width, Heigth);
 
-                    Generation = 0;
+                //    Generation = 0;
 
-                    Pause = false;
-                }
+                //    Pause = false;
+                //}
             }
 
         }
