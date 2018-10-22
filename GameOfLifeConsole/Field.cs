@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace GameOfLifeConsole
-{    
+{
 
     public class Field
     {
@@ -16,6 +16,35 @@ namespace GameOfLifeConsole
 
             Width = w;
             Heigth = h;
+        }
+
+        public string GetFieldInString()
+        {
+            //For Drawing 
+            string output = "";
+
+            for (int i = 0; i < Heigth; i++)
+            {
+                for (int j = 0; j < Width; j++)
+                {
+                    if (CellsToDraw[i, j])
+                    {
+                        output += '■';
+                    }
+                    else
+                    {
+                        output += '.';
+                    }
+                    output += ' ';
+                }
+                output += "\n";
+            }
+            return output;
+        }
+
+        public void DrawFieldToConsole()
+        {
+            Console.Write(GetFieldInString());
         }
     }
 }

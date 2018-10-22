@@ -56,6 +56,8 @@
     <Compile Include="Cell.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GamesHandler.cs" />
+    <Compile Include="GlobalKeyHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

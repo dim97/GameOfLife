@@ -10,8 +10,8 @@ namespace GameOfLifeConsole
     public class Game
     {
         public static bool Pause;
-        private static int enteredWidth;
-        private static int enteredHeigth;
+        public static int Width;
+        public static int Heigth;
         public static string FileName = "Save.json";
 
         public int GameNumber;
@@ -31,12 +31,8 @@ namespace GameOfLifeConsole
             Pause = false;
 
             SetRandomLivingCells();
-            Thread game = new Thread(Life);
-            Thread buttonHandler = new Thread(ButtonHandler);
 
-            game.Start();
-            buttonHandler.Start();
-
+            Life();
         }
 
         public void Life()
@@ -76,7 +72,7 @@ namespace GameOfLifeConsole
         public int CountLivingNeighbors(Cell cell)
         {
             int count = 0;
-            List<Point> neighborsPositions = cell.GetNeighbors(enteredWidth, enteredHeigth);
+            List<Point> neighborsPositions = cell.GetNeighbors(Width, Heigth);
             foreach (Point neighbor in neighborsPositions)
             {
                 if (Field.CellsToDraw[neighbor.Y, neighbor.X])
@@ -88,40 +84,15 @@ namespace GameOfLifeConsole
             return count;
         }
 
-        public static void RequestGameOptions()
-        {
-            string inputWidth = "";
-            string inputHeigth = "";
-            
-            Console.Write("Please enter width of field (in range: 1-200)  -> ");
-            inputWidth = Console.ReadLine();
-            while (!(Int32.TryParse(inputWidth, out enteredWidth) && (enteredWidth >= 1) && (enteredWidth <= 200)))
-            {
-                Console.Write("\nEntered width is incorrect. Please enter a positive integer number (in range: 1-200) -> ");
-                inputWidth = Console.ReadLine();
-            }
-
-            Console.Write("Please enter heigth of field (in range: 1-200)  -> ");
-            inputHeigth = Console.ReadLine();
-
-            while (!(Int32.TryParse(inputHeigth, out enteredHeigth)&&(enteredHeigth>=1) && (enteredHeigth <=200)))
-            {
-                Console.Write("\nEntered heigth is incorrect. Please enter a positive integer number (in range: 1-200) -> ");
-                inputHeigth = Console.ReadLine();
-            }
-
-            Console.Clear();
-        }
-
         public void SetGameOptions()
         {
-            Field = new Field(enteredWidth, enteredHeigth);
+            Field = new Field(Width, Heigth);
 
             Cells = new List<Cell>();
 
-            for (int i = 0; i < enteredHeigth; i++)
+            for (int i = 0; i < Heigth; i++)
             {
-                for (int j = 0; j < enteredWidth; j++)
+                for (int j = 0; j < Width; j++)
                 {
                     Cells.Add(new Cell(j, i));
                 }
@@ -146,7 +117,7 @@ namespace GameOfLifeConsole
             }
         }
 
-        public string GetFieldString()
+        public string GetGameData()
         {
             //For Drawing 
             string output = "";
@@ -154,22 +125,6 @@ namespace GameOfLifeConsole
             + "Current generation: " + Generation + "\n"
             + "Count of living cells: " + countOfLivingCells + "\n";
 
-            for (int i = 0; i < Field.Heigth; i++)
-            {
-                for (int j = 0; j < Field.Width; j++)
-                {
-                    if (Field.CellsToDraw[i, j])
-                    {
-                        output += '#';
-                    }
-                    else
-                    {
-                        output += '.';
-                    }
-                    output += ' ';
-                }
-                output += "\n";
-            }
             return output;
         }
 
@@ -232,9 +187,9 @@ namespace GameOfLifeConsole
                     Pause = true;
                     Cells.Clear();
                     Cells = JsonConvert.DeserializeObject<List<Cell>>(input);
-                    enteredWidth = Cells[Cells.Count - 1].Location.X + 1;
-                    enteredHeigth = Cells[Cells.Count - 1].Location.Y + 1;
-                    Field = new Field(enteredWidth, enteredHeigth);
+                    Width = Cells[Cells.Count - 1].Location.X + 1;
+                    Heigth = Cells[Cells.Count - 1].Location.Y + 1;
+                    Field = new Field(Width, Heigth);
 
                     Generation = 0;
 
