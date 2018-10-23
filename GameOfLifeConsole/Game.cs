@@ -142,62 +142,9 @@ namespace GameOfLifeConsole
                 {
                     cell.IsAlive = true;
                 }
-                Thread.Sleep(3);
+                //Thread.Sleep(3);
             }
         }
 
-        public void ButtonHandler()
-        {
-
-            ConsoleKeyInfo keyinfo;
-            while (true)
-            {
-                //Pause Key: "Spacebar"
-                keyinfo = Console.ReadKey();
-                if (keyinfo.Key == ConsoleKey.Spacebar)
-                {
-                    Pause = !Pause;
-                }
-
-                //Exit Key: "Escape"
-                if (keyinfo.Key == ConsoleKey.Escape)
-                {
-                    Environment.Exit(0);
-                }
-
-                //Save Key: "S"
-                //if (keyinfo.Key == ConsoleKey.S)
-                //{
-                //    string output = JsonConvert.SerializeObject(Cells);
-
-                //    using (StreamWriter sw = new StreamWriter(FileName))
-                //    {
-                //        sw.Write(output);
-                //    }
-                //}
-                //Load Key: "L"
-                //if (keyinfo.Key == ConsoleKey.L)
-                //{
-                //    string input;
-
-                //    using (StreamReader sr = new StreamReader(FileName))
-                //    {
-                //        input = sr.ReadLine();
-                //    }
-
-                //    Pause = true;
-                //    Cells.Clear();
-                //    Cells = JsonConvert.DeserializeObject<List<Cell>>(input);
-                //    Width = Cells[Cells.Count - 1].Location.X + 1;
-                //    Heigth = Cells[Cells.Count - 1].Location.Y + 1;
-                //    Field = new Field(Width, Heigth);
-
-                //    Generation = 0;
-
-                //    Pause = false;
-                //}
-            }
-
-        }
     }
 }
