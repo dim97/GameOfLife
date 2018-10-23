@@ -44,7 +44,7 @@ namespace GameOfLifeConsole
                 //Save current game "S"
                 if (keyinfo.Key == ConsoleKey.S)
                 {
-                    GamesHandler.SaveCurrentGameToFile("Save.json", GamesHandler.currentDrawingGame);
+                    GamesHandler.SaveCurrentGameToFile(GamesHandler.currentDrawingGame);
                 }
             }
         }

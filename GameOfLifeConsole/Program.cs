@@ -9,7 +9,7 @@ namespace GameOfLifeConsole
     {
         static void Main(string[] args)
         {
-            GamesHandler.Start();
+            Menu.ShowMenu();
         }
     }
 }

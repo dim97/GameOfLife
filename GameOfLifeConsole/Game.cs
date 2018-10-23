@@ -29,9 +29,6 @@ namespace GameOfLifeConsole
         public void Play()
         {
             Pause = false;
-
-            SetRandomLivingCells();
-
             Life();
         }
 
@@ -98,6 +95,7 @@ namespace GameOfLifeConsole
                     Cells.Add(new Cell(j, i));
                 }
             }
+            SetRandomLivingCells();
         }
 
         public void CountLivingCells()
@@ -122,9 +120,7 @@ namespace GameOfLifeConsole
         {
             //For Drawing 
             string output = "";
-            output += "Game number: " + GameNumber + "\n"
-            + "Current generation: " + Generation + "\n"
-            + "Count of living cells: " + countOfLivingCells + "\n";
+            output += "Game number: " + GameNumber + Environment.NewLine + "Current generation: " + Generation + Environment.NewLine + "Count of living cells: " + countOfLivingCells + Environment.NewLine;
 
             return output;
         }

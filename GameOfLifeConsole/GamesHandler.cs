@@ -9,14 +9,13 @@ namespace GameOfLifeConsole
     public static class GamesHandler
     {
         private static int gamesMaxCount = 1000;
-
-        public static int currentLoadedGamesCount;
+        private static string fileName = "Save.json";
         public static int currentDrawingGame = 0;
 
         public static List<Game> games;
         public static List<Thread> threads;
 
-        public static void Draw()
+        public static void DrawOneGame()
         {
             int lastDrawedGeneration = 0;
             while (true)
@@ -33,43 +32,45 @@ namespace GameOfLifeConsole
                 }
             }
         }
-
-        public static void Start()
+        public static void DrawEightGames()
         {
-            currentLoadedGamesCount = 0;
-            RequestGameOptions();
+            CreateGames(1000);
 
+            int lastDrawedGenerationForFirstGame = 0;
+            Random random = new Random();
+            List<Game> randomEightGames = new List<Game>();
+            for (int i = 0; i < 8; i++)
+            {
+                randomEightGames.Add(games[random.Next(gamesMaxCount)]);
+            }
+
+            while (true)
+            {
+                if ((!Game.Pause) && (randomEightGames[0].Generation != lastDrawedGenerationForFirstGame))
+                {
+                    Console.Clear();
+                    lastDrawedGenerationForFirstGame = randomEightGames[0].Generation;
+
+                    foreach (Game gameToDraw in randomEightGames)
+                    {
+                        Console.WriteLine(gameToDraw.GetGameData());
+                        gameToDraw.Field.DrawFieldToConsole();
+                    }
+
+                }
+
+            }
+        }
+
+        public static void StartThousandGames()
+        {
             Thread globalKeyHandler = new Thread(GlobalKeyHandler.HandleKeys);
             globalKeyHandler.Start();
-            CreateManyGames(1000);
-            Draw();
+            CreateGames(1000);
+            DrawOneGame();
         }
 
-        public static void RequestGameOptions()
-        {
-            string inputWidth = string.Empty;
-            string inputHeigth = string.Empty;
-
-            Console.Write("Please enter width of field (in range: 1-200)  -> ");
-            inputWidth = Console.ReadLine();
-            while (!(Int32.TryParse(inputWidth, out Game.Width) && (Game.Width >= 1) && (Game.Width <= 200)))
-            {
-                Console.Write("\nEntered width is incorrect. Please enter a positive integer number (in range: 1-200) -> ");
-                inputWidth = Console.ReadLine();
-            }
-
-            Console.Write("Please enter heigth of field (in range: 1-200)  -> ");
-            inputHeigth = Console.ReadLine();
-
-            while (!(Int32.TryParse(inputHeigth, out Game.Heigth) && (Game.Heigth >= 1) && (Game.Heigth <= 200)))
-            {
-                Console.Write("\nEntered heigth is incorrect. Please enter a positive integer number (in range: 1-200) -> ");
-                inputHeigth = Console.ReadLine();
-            }
-            Console.Clear();
-        }
-
-        public static void SaveAllGamesToFile(string fileName)
+        public static void SaveAllGamesToFile()
         {
             string output = JsonConvert.SerializeObject(games);
 
@@ -78,7 +79,7 @@ namespace GameOfLifeConsole
                 sw.Write(output);
             }
         }
-        public static void SaveCurrentGameToFile(string fileName, int gameNumber)
+        public static void SaveCurrentGameToFile(int gameNumber)
         {
             string output = JsonConvert.SerializeObject(games[gameNumber]);
 
@@ -88,28 +89,33 @@ namespace GameOfLifeConsole
             }
         }
 
-        public static void LoadGameFromFile(string fileName)
+        public static void LoadGameFromFile()
         {
-            currentDrawingGame = 0;
+            games = new List<Game>();
+            threads = new List<Thread>();
 
+            currentDrawingGame = 0;
             string input;
 
             StreamReader sr = new StreamReader(fileName);
-
             input = sr.ReadLine();
             sr.Close();
 
             Game gameToAdd = JsonConvert.DeserializeObject<Game>(input);
             Game.Width = gameToAdd.Cells[gameToAdd.Cells.Count - 1].Location.X + 1;
             Game.Heigth = gameToAdd.Cells[gameToAdd.Cells.Count - 1].Location.Y + 1;
-            gameToAdd.Field = new Field(Game.Width, Game.Heigth);
-
-            gameToAdd.Generation = 0;
-
+            
+            gameToAdd.GameNumber = 0;
             games.Add(gameToAdd);
             threads.Add(new Thread(gameToAdd.Play));
+            threads[0].Start();
+            
+            Thread globalKeyHandler = new Thread(GlobalKeyHandler.HandleKeys);
+            globalKeyHandler.Start();
+            DrawOneGame();
+
         }
-        public static void CreateManyGames(int countOfGames)
+        public static void CreateGames(int countOfGames)
         {
             gamesMaxCount = countOfGames;
             games = new List<Game>();
@@ -121,7 +127,6 @@ namespace GameOfLifeConsole
                 games[i].SetGameOptions();
                 threads.Add(new Thread(games[i].Play));
                 threads[i].Start();
-                currentLoadedGamesCount++;
                 currentDrawingGame = 0;
             }
 
