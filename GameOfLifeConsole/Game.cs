@@ -18,7 +18,7 @@ namespace GameOfLifeConsole
         public List<Cell> Cells;
         public Field Field;
         public int Generation;
-        private int countOfLivingCells = 0;
+        public int CountOfLivingCells = 0;
 
 
         public Game(int numberOfTheGame)
@@ -100,14 +100,14 @@ namespace GameOfLifeConsole
 
         public void CountLivingCells()
         {
-            countOfLivingCells = 0;
+            CountOfLivingCells = 0;
 
             foreach (Cell cell in Cells)
             {
                 if (cell.IsAlive)
                 {
                     Field.CellsToDraw[cell.Location.Y, cell.Location.X] = true;
-                    countOfLivingCells++;
+                    CountOfLivingCells++;
                 }
                 else
                 {
@@ -120,7 +120,7 @@ namespace GameOfLifeConsole
         {
             //For Drawing 
             string output = "";
-            output += "Game number: " + GameNumber + Environment.NewLine + "Current generation: " + Generation + Environment.NewLine + "Count of living cells: " + countOfLivingCells + Environment.NewLine;
+            output += "Game number: " + GameNumber + Environment.NewLine + "Current generation: " + Generation + Environment.NewLine + "Count of living cells: " + CountOfLivingCells + Environment.NewLine;
 
             return output;
         }

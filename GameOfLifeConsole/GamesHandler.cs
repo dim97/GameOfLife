@@ -11,6 +11,8 @@ namespace GameOfLifeConsole
         private static int gamesMaxCount = 1000;
         private static string fileName = "Save.json";
         public static int currentDrawingGame = 0;
+        public static int countOfLivingGames = 0;
+        public static int countOfAllLivingCells = 0;
 
         public static List<Game> games;
         public static List<Thread> threads;
@@ -25,7 +27,7 @@ namespace GameOfLifeConsole
                 {
                     lastDrawedGeneration = gameToDraw.Generation;
                     Console.Clear();
-
+                    Console.WriteLine(GetGlobalData());
                     Console.WriteLine(gameToDraw.GetGameData());
                     gameToDraw.Field.DrawFieldToConsole();
 
@@ -34,8 +36,6 @@ namespace GameOfLifeConsole
         }
         public static void DrawEightGames()
         {
-            CreateGames(1000);
-
             int lastDrawedGenerationForFirstGame = 0;
             Random random = new Random();
             List<Game> randomEightGames = new List<Game>();
@@ -50,24 +50,82 @@ namespace GameOfLifeConsole
                 {
                     Console.Clear();
                     lastDrawedGenerationForFirstGame = randomEightGames[0].Generation;
-
+                    Console.WriteLine(GetGlobalData());
                     foreach (Game gameToDraw in randomEightGames)
                     {
-                        Console.WriteLine(gameToDraw.GetGameData());
+                        Console.WriteLine(Environment.NewLine+gameToDraw.GetGameData());
                         gameToDraw.Field.DrawFieldToConsole();
                     }
-
                 }
-
             }
         }
-
-        public static void StartThousandGames()
+        public static void DrawAllGames()
         {
+            int lastDrawedGenerationForFirstGame = 0;
+
+            while (true)
+            {
+                if ((!Game.Pause) && (games[0].Generation != lastDrawedGenerationForFirstGame))
+                {
+                    Console.Clear();
+                    lastDrawedGenerationForFirstGame = games[0].Generation;
+                    Console.WriteLine(GetGlobalData());
+                    foreach (Game gameToDraw in games)
+                    {
+                        Console.WriteLine(Environment.NewLine + gameToDraw.GetGameData());
+                        gameToDraw.Field.DrawFieldToConsole();
+                    }
+                }
+            }
+        }
+        public static string GetGlobalData()
+        {
+            string output = string.Empty;
+            countOfLivingGames = 0;
+            countOfAllLivingCells = 0;
+
+            foreach (Game game in games)
+            {
+                if (game.CountOfLivingCells != 0)
+                {
+                    countOfLivingGames++;
+                    countOfAllLivingCells += game.CountOfLivingCells;
+                }
+            }
+
+            output =
+                "Total live games: " + countOfLivingGames + Environment.NewLine +
+                "Total living cells: "+ countOfAllLivingCells+ Environment.NewLine;
+            return output;
+        }
+
+        public static void StartOneGame()
+        {
+            CreateGames(1);
             Thread globalKeyHandler = new Thread(GlobalKeyHandler.HandleKeys);
             globalKeyHandler.Start();
-            CreateGames(1000);
             DrawOneGame();
+        }
+        public static void StartThousandGamesAndShowOne()
+        {
+            CreateGames(1000);
+            Thread globalKeyHandler = new Thread(GlobalKeyHandler.HandleKeys);
+            globalKeyHandler.Start();
+            DrawOneGame();
+        }
+        public static void StartThousandGamesAndShowEight()
+        {
+            CreateGames(1000);
+            Thread globalKeyHandler = new Thread(GlobalKeyHandler.HandleKeys);
+            globalKeyHandler.Start();
+            DrawEightGames();
+        }
+        public static void StartThousandGamesAndShowAll()
+        {
+            CreateGames(1000);
+            Thread globalKeyHandler = new Thread(GlobalKeyHandler.HandleKeys);
+            globalKeyHandler.Start();
+            DrawAllGames();
         }
 
         public static void SaveAllGamesToFile()

@@ -4,13 +4,24 @@ namespace GameOfLifeConsole
 {
     public static class Menu
     {
+        public const int OneGameSelected = 1;
+        public const int ThousandGamesSelected = 2;
+        public const int EightGamesSelected = 3;
+        public const int AllGamesSelected = 4;
+        public const int LoadGameSelected = 5;
+
+        public static int SelectedOption = 0;
+
         static string message =
             "Please select an option:   " + Environment.NewLine +
             "1. Start one game   " + Environment.NewLine +
             "2. Start 1000 games   " + Environment.NewLine +
             "3. Start 1000 games and show 8 random of them  " + Environment.NewLine +
-            "4. Load game from file" + Environment.NewLine +
+            "4. Start 1000 games and show all  " + Environment.NewLine +
+            "5. Load game from file" + Environment.NewLine +
             "(Enter the number of selected option) -> ";
+        static string errorMessage =
+            "You entered incorrect number. Please select the valid number of option from list of options and enter it's number" + Environment.NewLine + Environment.NewLine;
 
         static string input = String.Empty;
 
@@ -18,34 +29,52 @@ namespace GameOfLifeConsole
         {
             Console.Write(message);
             input = Console.ReadLine();
-            Console.Clear();
 
             switch (input)
             {
                 case "1":
                     {
+                        Console.Clear();
+                        SelectedOption = OneGameSelected;
                         RequestGameOptions();
+                        GamesHandler.StartOneGame();
                         break;
                     }
                 case "2":
                     {
+                        Console.Clear();
+                        SelectedOption = ThousandGamesSelected;
                         RequestGameOptions();
-                        GamesHandler.StartThousandGames();
+                        GamesHandler.StartThousandGamesAndShowOne();
                         break;
                     }
                 case "3":
                     {
+                        Console.Clear();
+                        SelectedOption = EightGamesSelected;
                         RequestGameOptions();
-                        GamesHandler.DrawEightGames();
+                        GamesHandler.StartThousandGamesAndShowEight();
                         break;
                     }
                 case "4":
                     {
+                        Console.Clear();
+                        SelectedOption = AllGamesSelected;
+                        RequestGameOptions();
+                        GamesHandler.StartThousandGamesAndShowAll();
+                        break;
+                    }
+                case "5":
+                    {
+                        Console.Clear();
+                        SelectedOption = LoadGameSelected;
                         GamesHandler.LoadGameFromFile();
                         break;
                     }
                 default:
                     {
+                        Console.Clear();
+                        Console.Write(errorMessage);
                         ShowMenu();
                         break;
                     }

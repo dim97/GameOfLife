@@ -25,8 +25,7 @@ namespace GameOfLifeConsole
                     Environment.Exit(0);
                 }
                 //Next Key: "RightArrow"
-                keyinfo = Console.ReadKey();
-                if (keyinfo.Key == ConsoleKey.RightArrow)
+                if ((keyinfo.Key == ConsoleKey.RightArrow) && (Menu.SelectedOption == Menu.ThousandGamesSelected))
                 {
                     if (GamesHandler.currentDrawingGame < GamesHandler.games.Count - 1)
                     {
@@ -34,7 +33,7 @@ namespace GameOfLifeConsole
                     }
                 }
                 //Next Previous: "LeftArrow"
-                if (keyinfo.Key == ConsoleKey.LeftArrow)
+                if ((keyinfo.Key == ConsoleKey.LeftArrow) && (Menu.SelectedOption == Menu.ThousandGamesSelected))
                 {
                     if (GamesHandler.currentDrawingGame > 0)
                     {
@@ -42,7 +41,7 @@ namespace GameOfLifeConsole
                     }
                 }
                 //Save current game "S"
-                if (keyinfo.Key == ConsoleKey.S)
+                if ((keyinfo.Key == ConsoleKey.S) && ((Menu.SelectedOption == Menu.ThousandGamesSelected)||(Menu.SelectedOption == Menu.OneGameSelected) || (Menu.SelectedOption == Menu.LoadGameSelected)))
                 {
                     GamesHandler.SaveCurrentGameToFile(GamesHandler.currentDrawingGame);
                 }
